@@ -1,6 +1,6 @@
 [project]
 name = "discord-bot-template"
-version = "0.0.0"
+version = "0.1.0"
 description = "A template for quickly starting a new Discord bot project."
 readme = "README.md"
 requires-python = ">=3.10"
