@@ -3,34 +3,35 @@
 import logging
 import sys
 
+import colorlog
+
 from src.utils.logging.config import (
-    DEFAULT_LOGGING_FORMAT,
-    DEFAULT_LOGGING_LEVEL,
+    COLOR_FORMATTER,
+    DEFAULT_LOGGING_LEVEL_DICT,
 )
 
 
-def setup_logging() -> logging.Logger:
-    """Set up and configure logging for the application.
+def setup_logging() -> tuple[logging.Logger, logging.Logger]:
+    """Set up and configure logging for the entire application."""
+    root_logger = logging.getLogger()
+    root_logger.setLevel(DEFAULT_LOGGING_LEVEL_DICT.get("main", logging.INFO))
 
-    Returns:
-        logging.Logger: Configured root logger.
-    """
+    # --- Console handler ---
+    console_handler = colorlog.StreamHandler(sys.stdout)
+    console_handler.setLevel(
+        DEFAULT_LOGGING_LEVEL_DICT.get("main", logging.INFO)
+    )
+    console_handler.setFormatter(COLOR_FORMATTER)
+    root_logger.handlers = [console_handler]
 
-    # Create a logger
-    logger = logging.getLogger()
-    logger.setLevel(level=DEFAULT_LOGGING_LEVEL)
+    # --- Discord ---
+    discord_logger = logging.getLogger("discord")
+    discord_logger.setLevel(
+        DEFAULT_LOGGING_LEVEL_DICT.get("discord", logging.INFO)
+    )
+    discord_logger.propagate = True
 
-    # Create console handler and set level to debug
-    sh = logging.StreamHandler(sys.stdout)
-    sh.setLevel(level=DEFAULT_LOGGING_LEVEL)
-
-    # Create formatter
-    formatter = logging.Formatter(DEFAULT_LOGGING_FORMAT)
-
-    # Add formatter to console handler
-    sh.setFormatter(formatter)
-
-    # Add console handler to logger
-    logger.addHandler(sh)
-
-    return logger
+    return (
+        root_logger,
+        discord_logger,
+    )

@@ -1,6 +1,6 @@
 repos:
 - repo: https://github.com/astral-sh/ruff-pre-commit
-  rev: v0.12.0
+  rev: v0.15.1
   hooks:
     # Run the linter.
     - id: ruff-check
@@ -13,26 +13,18 @@ repos:
       files: ^src/
 
 - repo: https://github.com/pre-commit/mirrors-mypy
-  rev: v1.16.1
+  rev: v1.19.1
   hooks:
     # Run mypy type checking.
     - id: mypy
       args: [--config-file=pyproject.toml ]
       files: ^src/
-
-- repo: local
-  hooks:
-    # Run pytest.
-    - id: pytest
-      name: pytest
-      entry: uv run pytest
-      language: system
-      types: [python]
-      pass_filenames: false
-      args: [ -v ]
+      additional_dependencies:
+        - discord.py>=2.6.4
+        - pydantic-settings>=2.13.0
 
 - repo: https://github.com/commitizen-tools/commitizen
-  rev: v4.8.3
+  rev: v4.13.8
   hooks:
     - id: commitizen
       stages: [commit-msg]

@@ -1,21 +1,23 @@
 [project]
-name = "python-boilerplate"
-version = "0.10.0"
-description = "A template for quickly starting new projects in Python "
+name = "discord-bot-template"
+version = "0.0.0"
+description = "A template for quickly starting a new Discord bot project."
 readme = "README.md"
 requires-python = ">=3.10"
-dependencies = ["environs>=14.2.0"]
+dependencies = [
+    "aiohttp>=3.13.3",
+    "colorlog>=6.10.1",
+    "discord-py>=2.6.4",
+    "environs>=14.2.0",
+    "pydantic-settings>=2.13.0",
+]
 
 [dependency-groups]
 dev = [
-    "commitizen>=4.8.2",
+    "commitizen>=4.13.7",
     "mypy>=1.16.0",
     "pre-commit>=4.2.0",
-    "pytest>=8.3.5",
-    "pytest-asyncio>=1.0.0",
     "ruff>=0.11.11",
-    "mkdocs>=1.6.1",
-    "mkdocs-material>=9.6.14",
 ]
 
 # ================================= RUFF
@@ -45,7 +47,7 @@ select = [
 ]
 
 # Ignore rules
-ignore = ["D202", "D212", "D104"]
+ignore = ["D202", "D212", "D104", "D101", "D107", "RUF001", "RUF006"]
 
 # Allow unused variables if they start with an underscore
 dummy-variable-rgx = "^(_+|(_+[a-zA-Z0-9_]*[a-zA-Z0-9]+?))$"
@@ -71,11 +73,21 @@ quote-style = "double"
 indent-style = "space"
 line-ending = "auto"
 
+[tool.pyright]
+include = ["src"]
+pythonVersion = "3.10"
+typeCheckingMode = "strict"
+
 # ================================= MYPY
 [tool.mypy]
 strict = true                 # Enable strict type checking
 explicit_package_bases = true
 ignore_missing_imports = true # Ignore missing imports for third-party libraries
+
+[[tool.mypy.overrides]]
+module = ["discord.*", "discord", "aiohttp.*"]
+ignore_missing_imports = true
+ignore_errors = true
 
 # ================================= COMMITIZEN
 [tool.commitizen]

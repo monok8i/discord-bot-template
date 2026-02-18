@@ -1,21 +1,25 @@
-"""Main entry point for the application."""
+"""Main entry point for the Nightcore bot."""
 
-from src.config.env import APP_STAGE, ENV_PATH
-from src.utils.logging import setup_logging
+from src.bot.setup import create_bot
+from src.config._global import config
+from src.config.env import ENV_PATH
+from src.utils.logging.setup import setup_logging
 
 
 def main() -> None:
-    """
-    Main entry point for the application.
+    """Main function to start the Nightcore bot."""
+    logger, discord_logger = setup_logging()
+    bot = create_bot()
 
-    Initializes logging, logs the application start,
-    current stage, and the path from which environment variables are loaded.
-    """
+    logger.info("Starting bot...")
+    logger.info("Loading environment variables from: %s", ENV_PATH)
 
-    logger = setup_logging()
-    logger.info("Starting the application...")
-    logger.info(f"App stage: {APP_STAGE}")
-    logger.info(f"Environment variables loaded from: {ENV_PATH}")
+    try:
+        bot.run(config.bot.BOT_TOKEN, log_handler=discord_logger.handlers[0])
+    except Exception as e:
+        logger.error("Error occurred: %s", e)
+    finally:
+        logger.info("Bot has been stopped.")
 
 
 if __name__ == "__main__":

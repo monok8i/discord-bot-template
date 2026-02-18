@@ -1,1 +1,0 @@
-Contributing: https://python-boilerplate.github.io/uv-template/home/contributing/
